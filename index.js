@@ -2,9 +2,11 @@ const express = require('express')
 require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId, BSON } = require('mongodb');
 const app = express()
-const cors = require('cors')
+const cors = require('cors');
+const bodyParser = require('body-parser');
 app.use(cors())
 app.use(express.json())
+app.use(bodyParser.json());
 const port = process.env.PORT
 // -------------------------------------
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.vst2gce.mongodb.net/?retryWrites=true&w=majority`;
@@ -43,9 +45,18 @@ async function run() {
       res.send({ result });
     });
 
+    app.patch('/comment/:id', async (req, res) => {
+      const data = req.body;
+      const { id } = req.params;
+      console.log(id, data);
+      const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $push: { reviews: data.review } });
+      res.send({ result });
+    });
+
     app.post('/books/:id', async (req, res) => {
       const data = req.body;
       const { id } = req.params;
+      console.log(data, id);
       const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $set: data });
       res.send({ result });
     });
