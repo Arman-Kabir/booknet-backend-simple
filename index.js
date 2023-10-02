@@ -48,7 +48,7 @@ async function run() {
     app.patch('/comment/:id', async (req, res) => {
       const data = req.body;
       const { id } = req.params;
-      console.log(id, data);
+      // console.log(id, data);
       const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $push: { reviews: data.review } });
       res.send({ result });
     });
@@ -58,6 +58,13 @@ async function run() {
       const { id } = req.params;
       console.log(data, id);
       const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $set: data });
+      res.send({ result });
+    });
+
+    app.delete('/books/:id', async (req, res) => {
+      const { id } = req.params;
+      console.log(id);
+      const result = await booksCollection.deleteOne({ _id: new ObjectId(id) });
       res.send({ result });
     });
 
