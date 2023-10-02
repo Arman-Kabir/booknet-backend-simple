@@ -27,45 +27,68 @@ async function run() {
     const booksCollection = db.collection('books');
 
     app.get('/books', async (req, res) => {
-      const result = await booksCollection.find({}).toArray();
-      res.send(result);
+      try {
+        const result = await booksCollection.find({}).toArray();
+        res.send(result);
+      } catch (error) {
+        res.send({ error })
+      }
     });
 
     app.get('/books/:id', async (req, res) => {
-      const { id } = req.params;
-      // console.log(id);
-
-      const result = await booksCollection.findOne({ _id: new ObjectId(id) });
-      res.send(result);
+      try {
+        const { id } = req.params;
+        // console.log(id);
+        const result = await booksCollection.findOne({ _id: new ObjectId(id) });
+        res.send(result);
+      } catch (error) {
+        res.send({ error })
+      }
     });
 
     app.post('/books', async (req, res) => {
-      const data = req.body;
-      const result = await booksCollection.insertOne(data);
-      res.send({ result });
+      try {
+        const data = req.body;
+        const result = await booksCollection.insertOne(data);
+        res.send({ result });
+      } catch (error) {
+        res.send({ error })
+      }
     });
 
     app.patch('/comment/:id', async (req, res) => {
-      const data = req.body;
-      const { id } = req.params;
-      // console.log(id, data);
-      const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $push: { reviews: data.review } });
-      res.send({ result });
+      try {
+        const data = req.body;
+        const { id } = req.params;
+        // console.log(id, data);
+        const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $push: { reviews: data.review } });
+        res.send({ result });
+      } catch (error) {
+        res.send({ error })
+      }
     });
 
     app.post('/books/:id', async (req, res) => {
-      const data = req.body;
-      const { id } = req.params;
-      console.log(data, id);
-      const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $set: data });
-      res.send({ result });
+      try {
+        const data = req.body;
+        const { id } = req.params;
+        console.log(data, id);
+        const result = await booksCollection.updateOne({ _id: new ObjectId(id) }, { $set: data });
+        res.send({ result });
+      } catch (error) {
+        res.send({ error })
+      }
     });
 
     app.delete('/books/:id', async (req, res) => {
-      const { id } = req.params;
-      console.log(id);
-      const result = await booksCollection.deleteOne({ _id: new ObjectId(id) });
-      res.send({ result });
+      try {
+        const { id } = req.params;
+        console.log(id);
+        const result = await booksCollection.deleteOne({ _id: new ObjectId(id) });
+        res.send({ result });
+      } catch (error) {
+        res.send({ error })
+      }
     });
 
   } finally {
